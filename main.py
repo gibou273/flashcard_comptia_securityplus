@@ -53,18 +53,16 @@ img_card_front = PhotoImage(file="images/card_front.png")
 img_card_back = PhotoImage(file="images/card_back.png")
 card_background = canvas.create_image(400, 263, image=img_card_front)
 title_text = canvas.create_text(400, 150, text="", font=("Ariel", 40, "italic"))
-abbreviation_text = canvas.create_text(400, 263, text="", font=("Ariel", 30, "italic"))
+abbreviation_text = canvas.create_text(400, 263, text="", font=("Ariel", 24, "italic"))
 canvas.config(bg=BACKGROUND_COLOR, highlightthickness=0)
 canvas.grid(row=0, column=0, columnspan=2)
 
 # unknown button
-unknown_image = PhotoImage(file="images/wrong.png")
-button_unknown = Button(image=unknown_image, highlightthickness=0, command=next_card)
-button_unknown.grid(row=1, column=0)
+unknown_button = Button(text="I Don't Know", font=("Ariel", 18, "italic"), bg="red", width=10, highlightthickness=0, command=remove_known_acronym)
+unknown_button.grid(row=1, column=0)
 # Known button
-known_image = PhotoImage(file="images/right.png")
-button_known = Button(image=known_image, highlightthickness=0, command=remove_known_acronym)
-button_known.grid(row=1, column=1)
+known_button = Button(text="I Know", font=("Ariel", 18, "italic"), bg="green", width=10, highlightthickness=0, command=remove_known_acronym)
+known_button.grid(row=1, column=1)
 
 next_card()
 
