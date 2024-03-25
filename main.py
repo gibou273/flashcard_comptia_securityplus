@@ -3,17 +3,23 @@ import pandas
 import random
 
 BACKGROUND_COLOR = "#B1DDC6"
-# Read the data from the csv file and convert it to a dictionary using pandas
-acronym_data = pandas.read_csv("data/acronyms.csv", on_bad_lines='skip')
-acronym_dict = acronym_data.to_dict(orient="records")
 current_item = {}
+acronyms_dict = {}
+# Read the data from the csv file and convert it to a dictionary using pandas
+try:
+    data = pandas.read_csv("data/acronyms_to_learn.csv", on_bad_lines='skip')
+except FileNotFoundError:
+    original_data = pandas.read_csv("data/acronyms.csv", on_bad_lines='skip')
+    acronyms_dict = original_data.to_dict(orient="records")
+else:
+    acronyms_dict = data.to_dict(orient="records")
 
 
 def next_card():
     global current_item
     global timer_to_flip_card
     screen.after_cancel(timer_to_flip_card)  # Resets timer back to zero every time you go to a new card
-    current_item = random.choice(acronym_dict)
+    current_item = random.choice(acronyms_dict)
     abbreviation_word = current_item["Abbreviation"]
     canvas.itemconfig(title_text, text="Abbreviation", fill="black")
     canvas.itemconfig(abbreviation_text, text=abbreviation_word, fill="black")
@@ -26,6 +32,14 @@ def flip_the_card():
     canvas.itemconfig(title_text, text="Meaning", fill="white")
     canvas.itemconfig(abbreviation_text, text=abbreviation_meaning, fill="white")
     canvas.itemconfig(card_background, image=img_card_back)
+
+
+def remove_known_acronym():
+    global current_item
+    acronyms_dict.remove(current_item)
+    unknown_acronyms = pandas.DataFrame(acronyms_dict)
+    unknown_acronyms.to_csv("data/acronyms_to_learn.csv")
+    next_card()
 
 
 screen = Tk()
@@ -49,15 +63,11 @@ button_unknown = Button(image=unknown_image, highlightthickness=0, command=next_
 button_unknown.grid(row=1, column=0)
 # Known button
 known_image = PhotoImage(file="images/right.png")
-button_known = Button(image=known_image, highlightthickness=0, command=next_card)
+button_known = Button(image=known_image, highlightthickness=0, command=remove_known_acronym)
 button_known.grid(row=1, column=1)
 
 next_card()
 
 screen.mainloop()
 
-new_image = PhotoImage(file="images/right.png")
-old_image = PhotoImage(file="old_image.png")
-canvas_image = canvas.create_image(300, 300, image=old_image)
-#To change the image:
-canvas.itemconfig(canvas_image, image=new_image)
+
