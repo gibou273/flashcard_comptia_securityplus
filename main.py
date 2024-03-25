@@ -38,7 +38,7 @@ def remove_known_acronym():
     global current_item
     acronyms_dict.remove(current_item)
     unknown_acronyms = pandas.DataFrame(acronyms_dict)
-    unknown_acronyms.to_csv("data/acronyms_to_learn.csv")
+    unknown_acronyms.to_csv("data/acronyms_to_learn.csv", index=False)
     next_card()
 
 
