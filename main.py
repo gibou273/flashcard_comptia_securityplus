@@ -1,4 +1,4 @@
-from tkinter import Tk, Canvas, PhotoImage, Label, Button
+from tkinter import Tk, Canvas, PhotoImage, Button
 import pandas
 import random
 
@@ -58,10 +58,10 @@ canvas.config(bg=BACKGROUND_COLOR, highlightthickness=0)
 canvas.grid(row=0, column=0, columnspan=2)
 
 # unknown button
-unknown_button = Button(text="I Don't Know", font=("Ariel", 18, "italic"), bg="red", width=10, highlightthickness=0, command=remove_known_acronym)
+unknown_button = Button(text="I don't Know", font=("Ariel", 18, "italic"), width=10, bg="#d95730", fg="white", highlightthickness=0, command=next_card)
 unknown_button.grid(row=1, column=0)
 # Known button
-known_button = Button(text="I Know", font=("Ariel", 18, "italic"), bg="green", width=10, highlightthickness=0, command=remove_known_acronym)
+known_button = Button(text="I Know", font=("Ariel", 18, "italic"), bg="#84d930", fg="white", width=10, highlightthickness=0, command=remove_known_acronym)
 known_button.grid(row=1, column=1)
 
 next_card()
