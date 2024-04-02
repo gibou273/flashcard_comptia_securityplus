@@ -1,15 +1,9 @@
 from tkinter import Tk, Canvas, PhotoImage, Button
 import pandas
 import random
-import smtplib
 import os
-from private_data import email_data
+from send_email import send_mail
 
-my_email_address = email_data['FROM_EMAIL']
-my_app_password = email_data.get("GMAIL_APP_PASSWORD")
-to_email_address = email_data.get("TO_EMAIL_ADDRESS")
-SMTP_GMAIL_ADDRESS = "smtp.gmail.com"
-SMTP_GMAIL_PORT = 587
 
 BACKGROUND_COLOR = "#B1DDC6"
 current_item = {}
@@ -50,25 +44,16 @@ def remove_known_acronym():
     unknown_acronyms.to_csv("data/acronyms_to_learn.csv", index=False)
     # Check if user knows all the words, by checking if the acronyms_to_learn.csv file is empty
     # when empty then delete the file, to avoid IndexError:index out of range error when user runs it again
-    print(len(acronyms_dict))
+    # print(len(acronyms_dict))
     if len(acronyms_dict) == 0:
         if os.path.exists("data/acronyms_to_learn.csv"):
             os.remove("data/acronyms_to_learn.csv")
             # Exit/Close the flashcard window/screen, when use masters all the acronyms for the exams
             screen.destroy()
             # Send email to remind user to go and take the CompTia Exams.
-            with smtplib.SMTP(SMTP_GMAIL_ADDRESS, SMTP_GMAIL_PORT) as connection:
-                # secure the connection from malicious hackers or attackers
-                connection.starttls()
-                # Log in to your email account
-                connection.login(user=my_email_address, password=my_app_password)
-                # Send email
-                message_to_send = "Hello!\nYou can now go and take the CompTIA Security+ Exams.\n\nRegards"
-                connection.sendmail(from_addr=my_email_address, to_addrs=to_email_address,
-                                    msg=f"Subject:Congratulations\n\n{message_to_send}")
+            send_mail(message="You can now go and take the CompTIA Security+ Exams.")
     else:
         next_card()
-
 
 
 screen = Tk()
@@ -87,10 +72,12 @@ canvas.config(bg=BACKGROUND_COLOR, highlightthickness=0)
 canvas.grid(row=0, column=0, columnspan=2)
 
 # unknown button
-unknown_button = Button(text="I don't Know", font=("Ariel", 18, "italic"), width=10, bg="#d95730", fg="white", highlightthickness=0, command=next_card)
+unknown_button = Button(text="I don't Know", font=("Ariel", 18, "italic"), width=10, bg="#d95730", fg="white",
+                        highlightthickness=0, command=next_card)
 unknown_button.grid(row=1, column=0)
 # Known button
-known_button = Button(text="I Know", font=("Ariel", 18, "italic"), bg="#84d930", fg="white", width=10, highlightthickness=0, command=remove_known_acronym)
+known_button = Button(text="I Know", font=("Ariel", 18, "italic"), bg="#84d930", fg="white", width=10,
+                      highlightthickness=0, command=remove_known_acronym)
 known_button.grid(row=1, column=1)
 
 next_card()
