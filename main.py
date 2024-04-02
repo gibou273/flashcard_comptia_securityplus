@@ -50,9 +50,12 @@ def remove_known_acronym():
     unknown_acronyms.to_csv("data/acronyms_to_learn.csv", index=False)
     # Check if user knows all the words, by checking if the acronyms_to_learn.csv file is empty
     # when empty then delete the file, to avoid IndexError:index out of range error when user runs it again
+    print(len(acronyms_dict))
     if len(acronyms_dict) == 0:
         if os.path.exists("data/acronyms_to_learn.csv"):
             os.remove("data/acronyms_to_learn.csv")
+            # Exit/Close the flashcard window/screen, when use masters all the acronyms for the exams
+            screen.destroy()
             # Send email to remind user to go and take the CompTia Exams.
             with smtplib.SMTP(SMTP_GMAIL_ADDRESS, SMTP_GMAIL_PORT) as connection:
                 # secure the connection from malicious hackers or attackers
